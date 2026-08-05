@@ -1,0 +1,48 @@
+class Payment:
+    def pay(self, amount):
+        pass
+
+# Strategy 1
+class CreditCardPayment(Payment):
+    def pay(self, amount):
+        print(f"Paid ₹{amount} using Credit Card.")
+
+# Strategy 2
+class UpiPayment(Payment):
+    def pay(self, amount):
+        print(f"Paid ₹{amount} using UPI.")
+
+# Strategy 3
+class CashPayment(Payment):
+    def pay(self, amount):
+        print(f"Paid ₹{amount} using Cash.")
+
+# Context
+class PaymentProcessor:
+    def __init__(self, payment_method):
+        self.payment_method = payment_method
+
+    def process_payment(self, amount):
+        self.payment_method.pay(amount)
+
+# Main Program
+print("Choose Payment Method:")
+print("1. Credit Card")
+print("2. UPI")
+print("3. Cash")
+
+choice = int(input("Enter your choice: "))
+amount = float(input("Enter amount: "))
+
+if choice == 1:
+    strategy = CreditCardPayment()
+elif choice == 2:
+    strategy = UpiPayment()
+elif choice == 3:
+    strategy = CashPayment()
+else:
+    print("Invalid choice!")
+    exit()
+
+processor = PaymentProcessor(strategy)
+processor.process_payment(amount)
