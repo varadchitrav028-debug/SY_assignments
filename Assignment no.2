@@ -1,0 +1,41 @@
+# Decorator
+def format_report(func):
+    def wrapper(self):
+        print("\n***** EMPLOYEE RATING REPORT *****")
+        func(self)
+        print("**********************************")
+    return wrapper
+
+class Employee:
+    company = "ABC Company"
+
+    # Class Method
+    @classmethod
+    def set_company(cls, name):
+        cls.company = name
+
+    def __init__(self, emp_id, name, rating):
+        self.emp_id = emp_id
+        self.name = name
+        self.rating = rating
+
+    # Magic Method
+    def __str__(self):
+        return (f"Company : {Employee.company}\n"
+                f"ID      : {self.emp_id}\n"
+                f"Name    : {self.name}\n"
+                f"Rating  : {self.rating}/5")
+
+    @format_report
+    def display(self):
+        print(self)
+
+# Main Program
+Employee.set_company(input("Enter Company Name: "))
+
+emp_id = input("Enter Employee ID: ")
+name = input("Enter Employee Name: ")
+rating = input("Enter Employee Rating (1-5): ")
+
+emp = Employee(emp_id, name, rating)
+emp.display()
