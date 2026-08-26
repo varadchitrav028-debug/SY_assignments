@@ -1,0 +1,42 @@
+# Memoization
+def fib_memo(n, memo={}):
+    if n <= 1:
+        return n
+
+    if n not in memo:
+        memo[n] = fib_memo(n - 1, memo) + fib_memo(n - 2, memo)
+
+    return memo[n]
+
+
+# Tabulation
+def fib_tab(n):
+    if n <= 1:
+        return n
+
+    dp = [0] * (n + 1)
+    dp[0] = 0
+    dp[1] = 1
+
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+
+    return dp[n]
+
+
+# User input
+n = int(input("Enter the number of terms: "))
+
+# Memoization series
+memo_series = [fib_memo(i) for i in range(n)]
+
+# Tabulation series
+tab_series = [fib_tab(i) for i in range(n)]
+
+print("\nUsing Memoization:")
+print("Fibonacci Series:", memo_series)
+print("Nth Fibonacci Number:", fib_memo(n - 1))
+
+print("\nUsing Tabulation:")
+print("Fibonacci Series:", tab_series)
+print("Nth Fibonacci Number:", fib_tab(n - 1))
