@@ -1,0 +1,20 @@
+def lcs(a, b):
+    dp = [[""] * (len(b) + 1) for _ in range(len(a) + 1)]
+
+    for i in range(len(a)):
+        for j in range(len(b)):
+            if a[i] == b[j]:
+                dp[i + 1][j + 1] = dp[i][j] + a[i]
+            else:
+                dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j], key=len)
+
+    return dp[len(a)][len(b)]
+
+
+a = input("Enter first sequence: ")
+b = input("Enter second sequence: ")
+
+result = lcs(a, b)
+
+print("Longest Common Subsequence:", result)
+print("Length of LCS:", len(result))
