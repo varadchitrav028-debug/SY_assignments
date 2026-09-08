@@ -1,0 +1,82 @@
+# 0/1 Knapsack Problem
+# Bottom-Up and Top-Down approaches
+
+
+# -------------------------------
+# Bottom-Up Approach
+# -------------------------------
+def knapsack_bottom_up(weights, values, capacity):
+    n = len(weights)
+
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+
+            if weights[i - 1] <= w:
+                dp[i][w] = max(
+                    dp[i - 1][w],
+                    values[i - 1] + dp[i - 1][w - weights[i - 1]]
+                )
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    return dp[n][capacity]
+
+
+# -------------------------------
+# Top-Down Approach
+# -------------------------------
+def knapsack_top_down(weights, values, capacity):
+    n = len(weights)
+
+    memo = {}
+
+    def solve(i, w):
+
+        if i == 0 or w == 0:
+            return 0
+
+        if (i, w) in memo:
+            return memo[(i, w)]
+
+        if weights[i - 1] <= w:
+            take = values[i - 1] + solve(
+                i - 1,
+                w - weights[i - 1]
+            )
+
+            not_take = solve(i - 1, w)
+
+            memo[(i, w)] = max(take, not_take)
+
+        else:
+            memo[(i, w)] = solve(i - 1, w)
+
+        return memo[(i, w)]
+
+    return solve(n, capacity)
+
+
+# -------------------------------
+# Main Program
+# -------------------------------
+
+weights = [2, 3, 4, 5]
+values = [3, 4, 5, 6]
+capacity = 5
+
+bottom_up_result = knapsack_bottom_up(
+    weights, values, capacity
+)
+
+top_down_result = knapsack_top_down(
+    weights, values, capacity
+)
+
+print("Weights :", weights)
+print("Values  :", values)
+print("Capacity:", capacity)
+
+print("\nBottom-Up Maximum Value:", bottom_up_result)
+print("Top-Down Maximum Value :", top_down_result)
