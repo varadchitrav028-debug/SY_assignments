@@ -1,0 +1,25 @@
+import numpy as np
+
+# 1. Create an array containing 10 random numbers
+arr = np.random.randint(1, 100, 10)
+
+print("Original Array:")
+print(arr)
+
+# 2. Indexing
+print("\nIndexing:")
+print("First element:", arr[0])
+print("Element at index 4:", arr[4])
+print("First five elements:", arr[:5])
+
+# 3. Filtering
+print("\nFiltering:")
+print("Numbers greater than 50:", arr[arr > 50])
+print("Numbers less than 30:", arr[arr < 30])
+
+# 4. Statistical operations
+print("\nStatistical Operations:")
+print("Mean:", np.mean(arr))
+print("Median:", np.median(arr))
+print("Minimum:", np.min(arr))
+print("Maximum:", np.max(arr))
