@@ -1,0 +1,156 @@
+
+# Exploratory Data Analysis (EDA) on Customer Churn Dataset
+
+# 1. Import Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set(style="whitegrid")
+
+# 2. Load Dataset
+df = pd.read_csv("customer_churn.csv")
+
+print("First Five Rows:")
+print(df.head())
+
+print("\nDataset Information:")
+df.info()
+
+print("\nDataset Shape:")
+print(df.shape)
+
+# 3. Data Cleaning
+
+# Remove duplicate records
+df.drop_duplicates(inplace=True)
+
+# Remove unnecessary customer ID column
+if "customerID" in df.columns:
+    df.drop(columns=["customerID"], inplace=True)
+
+# Convert TotalCharges into numeric format
+if "TotalCharges" in df.columns:
+    df["TotalCharges"] = pd.to_numeric(
+        df["TotalCharges"], errors="coerce"
+    )
+
+print("\nMissing Values Before Handling:")
+print(df.isnull().sum())
+
+# 4. Handle Missing Values
+
+# Fill numerical columns with median
+num_cols = df.select_dtypes(include=np.number).columns
+
+for col in num_cols:
+    df[col] = df[col].fillna(df[col].median())
+
+# Fill categorical columns with mode
+cat_cols = df.select_dtypes(include="object").columns
+
+for col in cat_cols:
+    if df[col].isnull().any():
+        df[col] = df[col].fillna(df[col].mode()[0])
+
+print("\nMissing Values After Handling:")
+print(df.isnull().sum())
+
+# 5. Summary Statistics
+
+print("\nSummary Statistics:")
+print(df.describe())
+
+print("\nMean:")
+print(df.select_dtypes(include=np.number).mean())
+
+print("\nMedian:")
+print(df.select_dtypes(include=np.number).median())
+
+print("\nStandard Deviation:")
+print(df.select_dtypes(include=np.number).std())
+
+# 6. Customer Churn Distribution
+
+print("\nCustomer Churn Count:")
+print(df["Churn"].value_counts())
+
+print("\nCustomer Churn Percentage:")
+print(df["Churn"].value_counts(normalize=True) * 100)
+
+# 7. Visualization - Churn Distribution
+
+plt.figure(figsize=(6, 4))
+sns.countplot(data=df, x="Churn", hue="Churn",
+              palette="Set2", legend=False)
+plt.title("Customer Churn Distribution")
+plt.xlabel("Churn")
+plt.ylabel("Number of Customers")
+plt.show()
+
+# 8. Monthly Charges vs Churn
+
+if "MonthlyCharges" in df.columns:
+    plt.figure(figsize=(7, 4))
+    sns.boxplot(data=df, x="Churn", y="MonthlyCharges",
+                hue="Churn", palette="Set2", legend=False)
+    plt.title("Monthly Charges vs Churn")
+    plt.show()
+
+# 9. Tenure vs Churn
+
+if "tenure" in df.columns:
+    plt.figure(figsize=(7, 4))
+    sns.histplot(data=df, x="tenure", hue="Churn",
+                 multiple="stack", bins=20)
+    plt.title("Customer Tenure vs Churn")
+    plt.xlabel("Tenure (Months)")
+    plt.ylabel("Number of Customers")
+    plt.show()
+
+# 10. Correlation Heatmap
+
+numeric_df = df.select_dtypes(include=np.number)
+
+plt.figure(figsize=(10, 6))
+sns.heatmap(numeric_df.corr(), annot=True,
+            cmap="coolwarm", fmt=".2f")
+plt.title("Correlation Heatmap")
+plt.show()
+
+# 11. Churn Based on Contract Type
+
+if "Contract" in df.columns:
+    print("\nChurn by Contract Type:")
+    print(pd.crosstab(df["Contract"], df["Churn"],
+                      normalize="index") * 100)
+
+    plt.figure(figsize=(8, 5))
+    sns.countplot(data=df, x="Contract",
+                  hue="Churn", palette="Set1")
+    plt.title("Customer Churn by Contract Type")
+    plt.xticks(rotation=15)
+    plt.show()
+
+# 12. Churn Based on Payment Method
+
+if "PaymentMethod" in df.columns:
+    print("\nChurn by Payment Method:")
+    print(pd.crosstab(df["PaymentMethod"], df["Churn"],
+                      normalize="index") * 100)
+
+    plt.figure(figsize=(9, 5))
+    sns.countplot(data=df, x="PaymentMethod",
+                  hue="Churn", palette="Set2")
+    plt.title("Customer Churn by Payment Method")
+    plt.xticks(rotation=30)
+    plt.show()
+
+# 13. Final Result
+
+print("\nEDA COMPLETED SUCCESSFULLY!")
+print("Dataset cleaned successfully.")
+print("Missing values handled successfully.")
+print("Summary statistics generated successfully.")
+print("Customer churn patterns visualized successfully.")
