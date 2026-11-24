@@ -1,0 +1,36 @@
+
+import gc
+import time
+
+print("Garbage Collection Status:", gc.isenabled())
+
+# Create objects
+my_list = []
+
+for i in range(100000):
+    my_list.append([i] * 10)
+
+print("Objects created successfully")
+
+# Check garbage before collection
+print("Garbage before collection:", len(gc.garbage))
+
+# Disable automatic garbage collection
+gc.disable()
+print("Automatic garbage collection disabled")
+
+# Perform manual garbage collection
+start = time.time()
+
+collected = gc.collect()
+
+end = time.time()
+
+print("Objects collected:", collected)
+print("Time taken:", end - start, "seconds")
+
+# Enable automatic garbage collection
+gc.enable()
+
+print("Automatic garbage collection enabled")
+print("Garbage Collection Status:", gc.isenabled())
